@@ -6,7 +6,6 @@ import LoginPage from "./pages/LoginPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import InventoryPage from "./pages/InventoryPage";
 import AddComponentPage from "./pages/AddComponentPage";
-import ScanIdPage from "./pages/ScanIdPage";
 
 function AppShell() {
   return (
@@ -18,14 +17,6 @@ function AppShell() {
           element={
             <ProtectedRoute>
               <TransactionsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/scan-id"
-          element={
-            <ProtectedRoute>
-              <ScanIdPage />
             </ProtectedRoute>
           }
         />

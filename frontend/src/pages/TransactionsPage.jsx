@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import BarcodeScanner from "../components/BarcodeScanner";
 import LoadingSpinner from "../components/LoadingSpinner";
 import api from "../lib/api";
 import { LAB_OPTIONS } from "../config/constants";
 
 export default function TransactionsPage() {
-  const location = useLocation();
-  const navigate = useNavigate();
   const [lab, setLab] = useState(LAB_OPTIONS[0]);
   const [mode, setMode] = useState("take");
   const [studentRoll, setStudentRoll] = useState("");
@@ -17,6 +15,7 @@ export default function TransactionsPage() {
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [scannerOpen, setScannerOpen] = useState(false);
 
   const fetchComponents = useCallback(async () => {
     try {
@@ -48,18 +47,11 @@ export default function TransactionsPage() {
     [components, selectedComponentId],
   );
 
-  useEffect(() => {
-    const scannedRoll = location.state?.scannedRoll;
-
-    if (!scannedRoll) {
-      return;
-    }
-
-    setStudentRoll(String(scannedRoll).replace(/\s+/g, ""));
+  const handleBarcodeDetected = (rawValue) => {
+    setStudentRoll(String(rawValue).replace(/\s+/g, ""));
+    setScannerOpen(false);
     toast.success("ID card scanned");
-
-    navigate(location.pathname, { replace: true, state: null });
-  }, [location.pathname, location.state, navigate]);
+  };
 
   const addToCart = () => {
     if (!selectedComponent) {
@@ -186,7 +178,7 @@ export default function TransactionsPage() {
           <label className="mb-1 block text-sm font-medium text-zinc-700">
             Student Roll Number
           </label>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <input
               value={studentRoll}
               onChange={(event) => setStudentRoll(event.target.value)}
@@ -195,20 +187,25 @@ export default function TransactionsPage() {
             />
             <button
               type="button"
-              onClick={() =>
-                navigate("/scan-id", {
-                  state: { returnTo: "/transactions" },
-                })
-              }
-              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700"
+              onClick={() => setScannerOpen((open) => !open)}
+              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 sm:w-auto"
             >
-              Scan ID Card
+              {scannerOpen ? "Close Scanner" : "Scan ID Card"}
             </button>
           </div>
+          {scannerOpen ? (
+            <div className="mt-3">
+              <BarcodeScanner
+                inline
+                onDetected={handleBarcodeDetected}
+                onClose={() => setScannerOpen(false)}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
 
-      <div className="grid gap-3 rounded-xl border border-zinc-200 bg-white p-4 md:grid-cols-[1fr_120px_auto]">
+      <div className="grid gap-3 rounded-xl border border-zinc-200 bg-white p-4 sm:grid-cols-[1fr_120px_auto]">
         <div>
           <label className="mb-1 block text-sm font-medium text-zinc-700">
             Component
@@ -295,7 +292,7 @@ export default function TransactionsPage() {
           type="button"
           onClick={submitTransaction}
           disabled={submitting}
-          className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+          className="mt-4 w-full rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60 sm:w-auto"
         >
           {submitting ? "Submitting..." : "Submit Transaction"}
         </button>

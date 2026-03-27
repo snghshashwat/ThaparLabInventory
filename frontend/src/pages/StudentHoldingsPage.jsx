@@ -3,6 +3,92 @@ import toast from "react-hot-toast";
 import BarcodeScanner from "../components/BarcodeScanner";
 import api from "../lib/api";
 
+function buildHoldingsFromTransactions(transactions, roll) {
+  const matchedTransactions = (transactions || []).filter(
+    (txn) =>
+      String(txn.studentRoll || "")
+        .trim()
+        .toLowerCase() === roll,
+  );
+
+  const holdingsMap = new Map();
+
+  for (const transaction of matchedTransactions.sort(
+    (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
+  )) {
+    for (const item of transaction.items || []) {
+      const key = `${transaction.lab}::${item.componentId}`;
+      const existing = holdingsMap.get(key) || {
+        lab: transaction.lab,
+        componentId: item.componentId,
+        name: item.name,
+        issueBatches: [],
+      };
+
+      const qty = Number(item.qty || 0);
+
+      if (transaction.type === "take") {
+        existing.issueBatches.push({
+          qty,
+          issuedAt: transaction.timestamp,
+        });
+      } else {
+        let remainingToReturn = qty;
+        while (remainingToReturn > 0 && existing.issueBatches.length > 0) {
+          const firstBatch = existing.issueBatches[0];
+          const consumed = Math.min(firstBatch.qty, remainingToReturn);
+          firstBatch.qty -= consumed;
+          remainingToReturn -= consumed;
+          if (firstBatch.qty <= 0) {
+            existing.issueBatches.shift();
+          }
+        }
+      }
+
+      holdingsMap.set(key, existing);
+    }
+  }
+
+  const positiveHoldings = [...holdingsMap.values()]
+    .map((item) => {
+      const qty = item.issueBatches.reduce((sum, batch) => sum + batch.qty, 0);
+      return {
+        lab: item.lab,
+        componentId: item.componentId,
+        name: item.name,
+        qty,
+        issuedOn: item.issueBatches[0]?.issuedAt || null,
+      };
+    })
+    .filter((item) => item.qty > 0)
+    .sort((a, b) => a.lab.localeCompare(b.lab) || a.name.localeCompare(b.name));
+
+  const groupedByLab = positiveHoldings.reduce((acc, item) => {
+    if (!acc[item.lab]) {
+      acc[item.lab] = [];
+    }
+    acc[item.lab].push(item);
+    return acc;
+  }, {});
+
+  const labs = Object.entries(groupedByLab).map(([labName, items]) => ({
+    lab: labName,
+    items,
+  }));
+
+  const totalItems = positiveHoldings.reduce((sum, item) => sum + item.qty, 0);
+
+  return {
+    labs,
+    totalItems,
+    transactionCount: matchedTransactions.length,
+    message:
+      totalItems === 0
+        ? "No holdings right now for this student."
+        : "Holdings fetched successfully.",
+  };
+}
+
 export default function StudentHoldingsPage() {
   const [studentRoll, setStudentRoll] = useState("");
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -18,7 +104,8 @@ export default function StudentHoldingsPage() {
   };
 
   const fetchHoldings = async () => {
-    const roll = studentRoll.trim();
+    const rawRoll = studentRoll.trim();
+    const roll = rawRoll.toLowerCase();
 
     if (!roll) {
       toast.error("Enter or scan a roll number");
@@ -27,15 +114,26 @@ export default function StudentHoldingsPage() {
 
     setLoading(true);
     try {
-      const { data } = await api.get(
-        `/transactions/student/${encodeURIComponent(roll)}/holdings`,
-      );
-      setResult(data);
-      if (!data.totalItems) {
-        toast.error(data.message || "No holdings right now for this student.");
+      const { data } = await api.get("/transactions", {
+        params: { limit: 200 },
+      });
+
+      const holdings = buildHoldingsFromTransactions(data.transactions, roll);
+      const normalized = {
+        ...holdings,
+        studentRoll: rawRoll,
+      };
+
+      setResult(normalized);
+
+      if (!normalized.totalItems) {
+        toast("No holdings right now for this student.");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to fetch holdings");
+      toast.error(
+        error.response?.data?.message ||
+          "Unable to load holdings right now. Please retry.",
+      );
     } finally {
       setLoading(false);
     }

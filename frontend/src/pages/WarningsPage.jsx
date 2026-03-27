@@ -14,18 +14,32 @@ export default function WarningsPage() {
     const fetchWarnings = async () => {
       try {
         setLoading(true);
-        const { data } = await api.get("/components/warnings", {
+        const { data } = await api.get("/components", {
           params: {
             lab: lab || undefined,
           },
         });
         if (isMounted) {
-          setWarnings(data.warnings || []);
+          const allComponents = data.components || [];
+          const filteredWarnings = allComponents
+            .filter((item) => Number(item.available) <= Number(item.threshold))
+            .map((item) => ({
+              ...item,
+              totalStock: item.totalStock ?? item.available,
+              belowThresholdSince:
+                item.belowThresholdSince || item.updatedAt || item.createdAt,
+            }))
+            .sort((a, b) =>
+              `${a.lab}-${a.name}`.localeCompare(`${b.lab}-${b.name}`),
+            );
+
+          setWarnings(filteredWarnings);
         }
       } catch (error) {
         if (isMounted) {
           toast.error(
-            error.response?.data?.message || "Failed to load warnings",
+            error.response?.data?.message ||
+              "Unable to load warnings right now. Please retry.",
           );
         }
       } finally {

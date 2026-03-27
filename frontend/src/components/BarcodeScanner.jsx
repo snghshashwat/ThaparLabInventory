@@ -34,7 +34,9 @@ export default function BarcodeScanner({ onDetected, onClose }) {
       if (controls) {
         controls.stop();
       }
-      reader.reset();
+      if (typeof reader.reset === "function") {
+        reader.reset();
+      }
     };
   }, [onDetected]);
 

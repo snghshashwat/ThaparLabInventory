@@ -86,7 +86,9 @@ export default function ScanIdPage() {
       if (controls) {
         controls.stop();
       }
-      reader.reset();
+      if (typeof reader.reset === "function") {
+        reader.reset();
+      }
     };
   }, [navigate, returnTo]);
 

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { NAV_ITEMS } from "../config/constants";
 import { useAuth } from "../context/AuthContext";
@@ -7,6 +8,7 @@ export default function Layout({ children }) {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = NAV_ITEMS.filter((item) =>
     user?.role === "admin" ? true : !item.adminOnly,
@@ -32,7 +34,16 @@ export default function Layout({ children }) {
       />
       <div className="relative z-10 flex flex-col min-h-screen">
         <header className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b-2 border-red-600 bg-white px-3 py-2 shadow-md sm:px-4 sm:py-3 md:px-8 md:flex-nowrap">
-          <div className="flex items-center gap-2 min-w-fit">
+          <div className="flex min-w-fit items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-700 md:hidden"
+              aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              <span className="text-lg leading-none">☰</span>
+            </button>
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-600 flex-shrink-0 sm:h-12 sm:w-12">
               <span className="text-base font-bold text-white sm:text-lg">
                 ti
@@ -75,8 +86,8 @@ export default function Layout({ children }) {
           </div>
         </header>
 
-        <div className="mx-auto grid w-full max-w-7xl gap-4 px-3 py-4 md:grid-cols-[240px_1fr] md:items-start md:px-6">
-          <aside className="self-start rounded-2xl border-2 border-red-300 bg-white p-3 shadow-md">
+        {mobileMenuOpen ? (
+          <div className="border-b border-red-200 bg-white px-3 py-2 shadow-sm md:hidden">
             <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-red-600">
               Navigation
             </p>
@@ -85,6 +96,7 @@ export default function Layout({ children }) {
                 <NavLink
                   key={item.path}
                   to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     [
                       "block rounded-lg px-3 py-2 text-sm font-medium transition",
@@ -98,11 +110,41 @@ export default function Layout({ children }) {
                 </NavLink>
               ))}
             </nav>
-          </aside>
+          </div>
+        ) : null}
 
-          <main className="flex-1 rounded-2xl border-2 border-red-300 bg-white p-4 shadow-md md:p-6 mb-20">
-            {children}
-          </main>
+        <div className="mx-auto w-full max-w-7xl px-3 py-4 md:px-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start">
+            <aside className="hidden md:block md:w-60 md:flex-shrink-0">
+              <div className="sticky top-24 rounded-2xl border-2 border-red-300 bg-white p-3 shadow-md">
+                <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-red-600">
+                  Navigation
+                </p>
+                <nav className="space-y-1">
+                  {navItems.map((item) => (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      className={({ isActive }) =>
+                        [
+                          "block rounded-lg px-3 py-2 text-sm font-medium transition",
+                          isActive || location.pathname === item.path
+                            ? "bg-red-600 text-white"
+                            : "text-red-900 hover:bg-red-50",
+                        ].join(" ")
+                      }
+                    >
+                      {item.label}
+                    </NavLink>
+                  ))}
+                </nav>
+              </div>
+            </aside>
+
+            <main className="min-w-0 flex-1 rounded-2xl border-2 border-red-300 bg-white p-4 shadow-md md:p-6 mb-20">
+              {children}
+            </main>
+          </div>
         </div>
       </div>
       <Footer user={user} />

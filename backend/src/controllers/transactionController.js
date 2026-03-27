@@ -101,7 +101,68 @@ const getTransactions = asyncHandler(async (req, res) => {
   res.json({ transactions });
 });
 
+const getStudentHoldings = asyncHandler(async (req, res) => {
+  const studentRollRaw = String(req.params.studentRoll || "").trim();
+
+  if (!studentRollRaw) {
+    return res.status(400).json({ message: "Student roll is required" });
+  }
+
+  const escapedRoll = studentRollRaw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const rollRegex = new RegExp(`^${escapedRoll}$`, "i");
+
+  const transactions = await Transaction.find({ studentRoll: rollRegex }).sort({
+    timestamp: 1,
+  });
+
+  const holdingsMap = new Map();
+
+  for (const transaction of transactions) {
+    const deltaMultiplier = transaction.type === "take" ? 1 : -1;
+
+    for (const item of transaction.items) {
+      const key = `${transaction.lab}::${item.componentId}`;
+      const existing = holdingsMap.get(key) || {
+        lab: transaction.lab,
+        componentId: item.componentId,
+        name: item.name,
+        qty: 0,
+      };
+
+      existing.qty += deltaMultiplier * Number(item.qty || 0);
+      holdingsMap.set(key, existing);
+    }
+  }
+
+  const positiveHoldings = [...holdingsMap.values()]
+    .filter((item) => item.qty > 0)
+    .sort((a, b) => a.lab.localeCompare(b.lab) || a.name.localeCompare(b.name));
+
+  const groupedByLab = positiveHoldings.reduce((acc, item) => {
+    if (!acc[item.lab]) {
+      acc[item.lab] = [];
+    }
+    acc[item.lab].push(item);
+    return acc;
+  }, {});
+
+  const labs = Object.entries(groupedByLab).map(([lab, items]) => ({
+    lab,
+    items,
+  }));
+
+  const totalItems = positiveHoldings.reduce((sum, item) => sum + item.qty, 0);
+
+  res.json({
+    studentRoll: studentRollRaw,
+    labs,
+    totalItems,
+    transactionCount: transactions.length,
+  });
+});
+
 module.exports = {
   createTransaction,
   getTransactions,
+  getStudentHoldings,
 };

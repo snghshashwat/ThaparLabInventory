@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import InventoryPage from "./pages/InventoryPage";
 import AddComponentPage from "./pages/AddComponentPage";
+import StudentHoldingsPage from "./pages/StudentHoldingsPage";
 
 function AppShell() {
   return (
@@ -17,6 +18,14 @@ function AppShell() {
           element={
             <ProtectedRoute>
               <TransactionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student-holdings"
+          element={
+            <ProtectedRoute>
+              <StudentHoldingsPage />
             </ProtectedRoute>
           }
         />

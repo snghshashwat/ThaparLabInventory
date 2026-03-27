@@ -1,8 +1,9 @@
 const express = require("express");
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const {
   createTransaction,
   getTransactions,
+  getStudentHoldings,
 } = require("../controllers/transactionController");
 const { authenticate } = require("../middleware/auth");
 const { authorizeRoles } = require("../middleware/authorize");
@@ -23,6 +24,12 @@ const transactionValidation = [
 router.use(authenticate);
 router.use(authorizeRoles("admin"));
 
+router.get(
+  "/student/:studentRoll/holdings",
+  [param("studentRoll").isString().trim().isLength({ min: 2, max: 60 })],
+  validateRequest,
+  getStudentHoldings,
+);
 router.get("/", getTransactions);
 router.post("/", transactionValidation, validateRequest, createTransaction);
 

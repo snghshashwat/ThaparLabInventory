@@ -20,6 +20,12 @@ const componentSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
+    totalStock: {
+      type: Number,
+      required: true,
+      min: 0,
+      default: 0,
+    },
     lab: {
       type: String,
       required: true,
@@ -31,6 +37,10 @@ const componentSchema = new mongoose.Schema(
       required: true,
       min: 0,
       default: 5,
+    },
+    belowThresholdSince: {
+      type: Date,
+      default: null,
     },
   },
   {

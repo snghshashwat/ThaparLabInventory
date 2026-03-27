@@ -4,6 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import TransactionsPage from "./pages/TransactionsPage";
+import WarningsPage from "./pages/WarningsPage";
 import LogsPage from "./pages/LogsPage";
 import InventoryPage from "./pages/InventoryPage";
 import AddComponentPage from "./pages/AddComponentPage";
@@ -19,6 +20,14 @@ function AppShell() {
           element={
             <ProtectedRoute>
               <TransactionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/warnings"
+          element={
+            <ProtectedRoute>
+              <WarningsPage />
             </ProtectedRoute>
           }
         />

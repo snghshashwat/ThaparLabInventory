@@ -37,6 +37,7 @@ export const LAB_INSTRUCTORS = {
 export const NAV_ITEMS = [
   { label: "Dashboard", path: "/dashboard", adminOnly: false },
   { label: "Transactions", path: "/transactions", adminOnly: true },
+  { label: "Warnings", path: "/warnings", adminOnly: true },
   { label: "Logs", path: "/logs", adminOnly: true },
   { label: "Student Holdings", path: "/student-holdings", adminOnly: true },
   { label: "Inventory", path: "/inventory", adminOnly: true },

@@ -7,6 +7,7 @@ const initialForm = {
   name: "",
   componentId: "",
   available: 0,
+  totalStock: 0,
   threshold: 5,
   lab: LAB_OPTIONS[0],
 };
@@ -28,6 +29,7 @@ export default function AddComponentPage() {
         name: form.name,
         componentId: form.componentId.toUpperCase(),
         available: Number(form.available),
+        totalStock: Number(form.totalStock),
         threshold: Number(form.threshold),
         lab: form.lab,
       });
@@ -52,6 +54,9 @@ export default function AddComponentPage() {
           <label className="mb-1 block text-sm font-medium text-zinc-700">
             Component Name
           </label>
+          <p className="mb-1 text-xs text-zinc-500">
+            Full descriptive name visible in inventory and logs.
+          </p>
           <input
             required
             value={form.name}
@@ -62,8 +67,11 @@ export default function AddComponentPage() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-zinc-700">
-            Component ID
+            Model ID
           </label>
+          <p className="mb-1 text-xs text-zinc-500">
+            Unique model/code used for issue-return tracking.
+          </p>
           <input
             required
             value={form.componentId}
@@ -78,6 +86,9 @@ export default function AddComponentPage() {
           <label className="mb-1 block text-sm font-medium text-zinc-700">
             Available Stock
           </label>
+          <p className="mb-1 text-xs text-zinc-500">
+            Quantity currently available to issue right now.
+          </p>
           <input
             required
             type="number"
@@ -92,8 +103,30 @@ export default function AddComponentPage() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-zinc-700">
+            Total Stock
+          </label>
+          <p className="mb-1 text-xs text-zinc-500">
+            Total quantity owned by the lab for this component.
+          </p>
+          <input
+            required
+            type="number"
+            min="0"
+            value={form.totalStock}
+            onChange={(event) =>
+              updateField("totalStock", Number(event.target.value))
+            }
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium text-zinc-700">
             Low Stock Threshold
           </label>
+          <p className="mb-1 text-xs text-zinc-500">
+            Warning level when available stock reaches this number.
+          </p>
           <input
             required
             type="number"
@@ -110,6 +143,9 @@ export default function AddComponentPage() {
           <label className="mb-1 block text-sm font-medium text-zinc-700">
             Lab
           </label>
+          <p className="mb-1 text-xs text-zinc-500">
+            Select the lab where this component will be maintained.
+          </p>
           <select
             value={form.lab}
             onChange={(event) => updateField("lab", event.target.value)}

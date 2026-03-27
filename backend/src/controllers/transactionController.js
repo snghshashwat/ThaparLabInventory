@@ -54,6 +54,20 @@ const createTransaction = asyncHandler(async (req, res) => {
           component.available += item.qty;
         }
 
+        if (
+          !Number.isFinite(component.totalStock) ||
+          component.totalStock < 0
+        ) {
+          component.totalStock = Math.max(component.available, 0);
+        }
+
+        if (component.available <= component.threshold) {
+          component.belowThresholdSince =
+            component.belowThresholdSince || new Date();
+        } else {
+          component.belowThresholdSince = null;
+        }
+
         await component.save({ session });
       }
 

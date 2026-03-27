@@ -43,3 +43,13 @@ body {
 main {
   animation: fadeSlide 250ms ease-out;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  main {
+    animation: none;
+  }
+}

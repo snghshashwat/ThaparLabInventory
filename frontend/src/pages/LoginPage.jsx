@@ -31,7 +31,7 @@ export default function LoginPage() {
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/college-campus.jpg')" }}
       />
-      <div className="absolute inset-0 bg-white/60 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-white/60" />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center p-4">
         <div className="w-full max-w-md rounded-3xl border-2 border-red-200 bg-white/95 p-8 text-center shadow-2xl">

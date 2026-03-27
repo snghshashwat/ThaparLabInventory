@@ -27,11 +27,11 @@ export default function Layout({ children }) {
           backgroundImage: "url('/college-campus.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-          filter: "blur(2px) brightness(0.9)",
+          filter: "brightness(0.93)",
           zIndex: 0,
         }}
       />
+
       <div className="relative z-10 flex flex-col min-h-screen">
         <header className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b-2 border-red-600 bg-white px-3 py-2 shadow-md sm:px-4 sm:py-3 md:px-8 md:flex-nowrap">
           <div className="flex min-w-fit items-center gap-2">
@@ -44,20 +44,23 @@ export default function Layout({ children }) {
             >
               <span className="text-lg leading-none">☰</span>
             </button>
+
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-600 flex-shrink-0 sm:h-12 sm:w-12">
               <span className="text-base font-bold text-white sm:text-lg">
                 ti
               </span>
             </div>
-            <div className="hidden sm:block">
-              <p className="text-xs font-semibold uppercase tracking-widest text-red-600 leading-none">
-                Thapar Institute
+
+            <div className="min-w-0">
+              <p className="max-w-[45vw] truncate text-sm font-semibold text-red-700 sm:text-lg">
+                Smart Lab Inventory
               </p>
-              <p className="text-xs font-bold text-red-700 sm:text-sm leading-none">
-                Lab Inventory
+              <p className="hidden text-[11px] uppercase tracking-wide text-red-500 sm:block">
+                Thapar Institute
               </p>
             </div>
           </div>
+
           <div className="flex items-center gap-2 ml-auto">
             <div className="hidden text-right md:block">
               <p className="text-xs sm:text-sm font-semibold text-red-900 truncate">
@@ -67,6 +70,7 @@ export default function Layout({ children }) {
                 {user?.role}
               </p>
             </div>
+
             {user?.picture ? (
               <img
                 src={user.picture}
@@ -76,6 +80,7 @@ export default function Layout({ children }) {
             ) : (
               <div className="h-8 w-8 rounded-full border-2 border-red-600 bg-red-100 flex-shrink-0 sm:h-10 sm:w-10" />
             )}
+
             <button
               type="button"
               onClick={handleLogout}
@@ -147,6 +152,7 @@ export default function Layout({ children }) {
           </div>
         </div>
       </div>
+
       <Footer user={user} />
     </div>
   );

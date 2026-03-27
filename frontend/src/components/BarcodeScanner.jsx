@@ -117,8 +117,8 @@ export default function BarcodeScanner({
   return (
     <div className={containerClass}>
       <div className={wrapperClass}>
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-zinc-900">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h3 className="min-w-0 break-words text-lg font-semibold text-zinc-900">
             Scan Student Barcode
           </h3>
           <button
@@ -139,7 +139,7 @@ export default function BarcodeScanner({
                 facing === "environment" ? "user" : "environment",
               );
             }}
-            className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700"
+            className="w-full rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 sm:w-auto"
           >
             Switch Camera (
             {preferredFacing === "environment" ? "Rear" : "Front"})
@@ -170,7 +170,7 @@ export default function BarcodeScanner({
         </p>
         <video
           ref={videoRef}
-          className="h-64 w-full rounded-lg border border-zinc-300 bg-zinc-100 object-cover sm:h-72"
+          className="h-56 w-full rounded-lg border border-zinc-300 bg-zinc-100 object-cover sm:h-72"
         />
         {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
       </div>

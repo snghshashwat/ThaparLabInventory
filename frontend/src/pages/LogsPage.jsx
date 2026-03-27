@@ -100,7 +100,7 @@ export default function LogsPage() {
                     <td className="break-all px-2 py-2 whitespace-normal">
                       {log.doneBy}
                     </td>
-                    <td className="px-2 py-2">
+                    <td className="break-words whitespace-normal px-2 py-2">
                       {new Date(log.timestamp).toLocaleString()}
                     </td>
                   </tr>

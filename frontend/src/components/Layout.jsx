@@ -20,7 +20,7 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white flex flex-col">
+    <div className="relative min-h-screen overflow-x-hidden bg-white flex flex-col">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -33,8 +33,8 @@ export default function Layout({ children }) {
       />
 
       <div className="relative z-10 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b-2 border-red-600 bg-white px-3 py-2 shadow-md sm:px-4 sm:py-3 md:px-8 md:flex-nowrap">
-          <div className="flex min-w-fit items-center gap-2">
+        <header className="sticky top-0 z-20 flex min-w-0 flex-wrap items-center justify-between gap-2 border-b-2 border-red-600 bg-white px-3 py-2 shadow-md sm:px-4 sm:py-3 md:px-8 md:flex-nowrap">
+          <div className="flex min-w-0 items-center gap-2">
             <button
               type="button"
               onClick={() => setMobileMenuOpen((open) => !open)}
@@ -52,7 +52,7 @@ export default function Layout({ children }) {
             </div>
 
             <div className="min-w-0">
-              <p className="max-w-[45vw] truncate text-sm font-semibold text-red-700 sm:text-lg">
+              <p className="max-w-[36vw] truncate text-sm font-semibold text-red-700 sm:max-w-[45vw] sm:text-lg">
                 Smart Lab Inventory
               </p>
               <p className="hidden text-[11px] uppercase tracking-wide text-red-500 sm:block">
@@ -61,7 +61,7 @@ export default function Layout({ children }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="ml-auto flex min-w-0 items-center gap-1.5 sm:gap-2">
             <div className="hidden text-right md:block">
               <p className="text-xs sm:text-sm font-semibold text-red-900 truncate">
                 {user?.name}
@@ -118,7 +118,7 @@ export default function Layout({ children }) {
           </div>
         ) : null}
 
-        <div className="mx-auto w-full max-w-7xl px-3 py-4 md:px-6">
+        <div className="mx-auto w-full max-w-7xl px-2 py-3 sm:px-3 sm:py-4 md:px-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-start">
             <aside className="hidden md:block md:w-60 md:flex-shrink-0">
               <div className="sticky top-24 rounded-2xl border-2 border-red-300 bg-white p-3 shadow-md">
@@ -146,7 +146,7 @@ export default function Layout({ children }) {
               </div>
             </aside>
 
-            <main className="min-w-0 flex-1 rounded-2xl border-2 border-red-300 bg-white p-4 shadow-md md:p-6 mb-20">
+            <main className="min-w-0 flex-1 overflow-x-hidden rounded-2xl border-2 border-red-300 bg-white p-3 shadow-md sm:p-4 md:p-6 mb-20">
               {children}
             </main>
           </div>

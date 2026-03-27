@@ -58,7 +58,7 @@ export default function DashboardPage() {
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <h2 className="text-2xl font-bold text-zinc-900">Dashboard</h2>
         <select
-          className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm md:w-auto"
           value={lab}
           onChange={(event) => setLab(event.target.value)}
         >
@@ -120,22 +120,24 @@ export default function DashboardPage() {
           </p>
         ) : (
           <div className="mt-3 overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
+            <table className="min-w-full table-fixed text-left text-sm">
               <thead className="text-zinc-500">
                 <tr>
-                  <th className="px-2 py-2">Component</th>
-                  <th className="px-2 py-2">ID</th>
-                  <th className="px-2 py-2">Available</th>
-                  <th className="px-2 py-2">Threshold</th>
+                  <th className="w-[44%] px-2 py-2">Component</th>
+                  <th className="w-[28%] px-2 py-2">ID</th>
+                  <th className="w-[14%] px-2 py-2">Available</th>
+                  <th className="w-[14%] px-2 py-2">Threshold</th>
                 </tr>
               </thead>
               <tbody>
                 {dashboard.lowStock.map((item) => (
                   <tr key={item._id} className="border-t border-zinc-100">
-                    <td className="px-2 py-2 font-medium text-zinc-800">
+                    <td className="break-words whitespace-normal px-2 py-2 font-medium text-zinc-800">
                       {item.name}
                     </td>
-                    <td className="px-2 py-2">{item.componentId}</td>
+                    <td className="break-all whitespace-normal px-2 py-2">
+                      {item.componentId}
+                    </td>
                     <td className="px-2 py-2 text-red-700">{item.available}</td>
                     <td className="px-2 py-2">{item.threshold}</td>
                   </tr>
@@ -151,28 +153,32 @@ export default function DashboardPage() {
           Recent Transactions
         </h3>
         <div className="mt-3 overflow-x-auto">
-          <table className="min-w-full text-left text-sm">
+          <table className="min-w-full table-fixed text-left text-sm">
             <thead className="text-zinc-500">
               <tr>
-                <th className="px-2 py-2">Student Roll</th>
-                <th className="px-2 py-2">Type</th>
-                <th className="px-2 py-2">Items</th>
-                <th className="px-2 py-2">Done By</th>
-                <th className="px-2 py-2">Time</th>
+                <th className="w-[16%] px-2 py-2">Student Roll</th>
+                <th className="w-[12%] px-2 py-2">Type</th>
+                <th className="w-[34%] px-2 py-2">Items</th>
+                <th className="w-[18%] px-2 py-2">Done By</th>
+                <th className="w-[20%] px-2 py-2">Time</th>
               </tr>
             </thead>
             <tbody>
               {dashboard.recentTransactions.map((txn) => (
                 <tr key={txn._id} className="border-t border-zinc-100">
-                  <td className="px-2 py-2">{txn.studentRoll}</td>
+                  <td className="break-all whitespace-normal px-2 py-2">
+                    {txn.studentRoll}
+                  </td>
                   <td className="px-2 py-2 capitalize">{txn.type}</td>
-                  <td className="px-2 py-2">
+                  <td className="break-words whitespace-normal px-2 py-2">
                     {txn.items
                       .map((item) => `${item.name} (${item.qty})`)
                       .join(", ")}
                   </td>
-                  <td className="px-2 py-2">{txn.doneBy}</td>
-                  <td className="px-2 py-2">
+                  <td className="break-all whitespace-normal px-2 py-2">
+                    {txn.doneBy}
+                  </td>
+                  <td className="break-words whitespace-normal px-2 py-2">
                     {new Date(txn.timestamp).toLocaleString()}
                   </td>
                 </tr>

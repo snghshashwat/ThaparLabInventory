@@ -99,7 +99,7 @@ export default function InventoryPage() {
           Inventory Management
         </h2>
         <select
-          className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm md:w-auto"
           value={lab}
           onChange={(event) => setLab(event.target.value)}
         >
@@ -116,31 +116,33 @@ export default function InventoryPage() {
       ) : (
         <section className="rounded-xl border border-zinc-200 bg-white p-4">
           <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
+            <table className="min-w-full table-fixed text-left text-sm">
               <thead className="text-zinc-500">
                 <tr>
-                  <th className="px-2 py-2">Name</th>
-                  <th className="px-2 py-2">Model ID</th>
-                  <th className="px-2 py-2">Available</th>
-                  <th className="px-2 py-2">Total Stock</th>
-                  <th className="px-2 py-2">Threshold</th>
-                  <th className="px-2 py-2">Actions</th>
+                  <th className="w-[28%] px-2 py-2">Name</th>
+                  <th className="w-[20%] px-2 py-2">Model ID</th>
+                  <th className="w-[12%] px-2 py-2">Available</th>
+                  <th className="w-[12%] px-2 py-2">Total Stock</th>
+                  <th className="w-[10%] px-2 py-2">Threshold</th>
+                  <th className="w-[18%] px-2 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {components.map((component) => (
                   <tr key={component._id} className="border-t border-zinc-100">
-                    <td className="px-2 py-2 font-medium text-zinc-800">
+                    <td className="break-words whitespace-normal px-2 py-2 font-medium text-zinc-800">
                       {component.name}
                     </td>
-                    <td className="px-2 py-2">{component.componentId}</td>
+                    <td className="break-all whitespace-normal px-2 py-2">
+                      {component.componentId}
+                    </td>
                     <td className="px-2 py-2">{component.available}</td>
                     <td className="px-2 py-2">
                       {component.totalStock ?? component.available}
                     </td>
                     <td className="px-2 py-2">{component.threshold}</td>
                     <td className="px-2 py-2">
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         <button
                           type="button"
                           onClick={() => beginEdit(component)}

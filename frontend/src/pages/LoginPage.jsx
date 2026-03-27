@@ -33,8 +33,8 @@ export default function LoginPage() {
       />
       <div className="absolute inset-0 bg-white/60" />
 
-      <div className="relative z-10 flex min-h-screen items-center justify-center p-4">
-        <div className="w-full max-w-md rounded-3xl border-2 border-red-200 bg-white/95 p-8 text-center shadow-2xl">
+      <div className="relative z-10 flex min-h-screen items-center justify-center p-4 pb-24 sm:pb-20">
+        <div className="w-full max-w-md rounded-3xl border-2 border-red-200 bg-white/95 p-6 text-center shadow-2xl sm:p-8">
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-600">
             <span className="text-4xl font-bold text-white">ti</span>
           </div>
@@ -59,7 +59,10 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <footer className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center border-t-2 border-red-300 bg-white px-4 py-3 text-sm font-semibold text-zinc-700 shadow-md sm:text-base">
+      <footer
+        className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center border-t-2 border-red-300 bg-white px-4 py-3 text-center text-sm font-semibold text-zinc-700 shadow-md sm:text-base"
+        style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
+      >
         <p className="tracking-wide">
           Made by{" "}
           <a

@@ -7,7 +7,7 @@ export default function StatCard({ label, value, tone = "default" }) {
         : "border-zinc-200 bg-white";
 
   return (
-    <div className={`rounded-xl border p-4 shadow-sm ${toneClass}`}>
+    <div className={`h-full rounded-2xl border p-4 shadow-sm ${toneClass}`}>
       <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
         {label}
       </p>

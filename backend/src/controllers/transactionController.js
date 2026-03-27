@@ -118,23 +118,56 @@ const getStudentHoldings = asyncHandler(async (req, res) => {
   const holdingsMap = new Map();
 
   for (const transaction of transactions) {
-    const deltaMultiplier = transaction.type === "take" ? 1 : -1;
-
     for (const item of transaction.items) {
       const key = `${transaction.lab}::${item.componentId}`;
       const existing = holdingsMap.get(key) || {
         lab: transaction.lab,
         componentId: item.componentId,
         name: item.name,
-        qty: 0,
+        issueBatches: [],
       };
 
-      existing.qty += deltaMultiplier * Number(item.qty || 0);
+      const qty = Number(item.qty || 0);
+
+      if (transaction.type === "take") {
+        existing.issueBatches.push({
+          qty,
+          issuedAt: transaction.timestamp,
+        });
+      } else {
+        let remainingToReturn = qty;
+
+        while (remainingToReturn > 0 && existing.issueBatches.length > 0) {
+          const firstBatch = existing.issueBatches[0];
+          const consumed = Math.min(firstBatch.qty, remainingToReturn);
+          firstBatch.qty -= consumed;
+          remainingToReturn -= consumed;
+
+          if (firstBatch.qty <= 0) {
+            existing.issueBatches.shift();
+          }
+        }
+      }
+
       holdingsMap.set(key, existing);
     }
   }
 
   const positiveHoldings = [...holdingsMap.values()]
+    .map((item) => {
+      const qty = item.issueBatches.reduce((sum, batch) => sum + batch.qty, 0);
+      return {
+        lab: item.lab,
+        componentId: item.componentId,
+        name: item.name,
+        qty,
+        issuedOn: item.issueBatches[0]?.issuedAt || null,
+        issueDates: item.issueBatches.map((batch) => ({
+          qty: batch.qty,
+          issuedAt: batch.issuedAt,
+        })),
+      };
+    })
     .filter((item) => item.qty > 0)
     .sort((a, b) => a.lab.localeCompare(b.lab) || a.name.localeCompare(b.name));
 
@@ -152,12 +185,17 @@ const getStudentHoldings = asyncHandler(async (req, res) => {
   }));
 
   const totalItems = positiveHoldings.reduce((sum, item) => sum + item.qty, 0);
+  const message =
+    totalItems === 0
+      ? "No holdings right now for this student."
+      : "Holdings fetched successfully.";
 
   res.json({
     studentRoll: studentRollRaw,
     labs,
     totalItems,
     transactionCount: transactions.length,
+    message,
   });
 });
 

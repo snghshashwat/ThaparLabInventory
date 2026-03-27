@@ -8,7 +8,10 @@ function authenticate(req, res, next) {
   const token = req.cookies.token || headerToken;
 
   if (!token) {
-    return res.status(401).json({ message: "Authentication required" });
+    return res.status(401).json({
+      message:
+        "Authentication required. Please sign in with your @thapar.edu account.",
+    });
   }
 
   try {
@@ -22,7 +25,10 @@ function authenticate(req, res, next) {
 
     return next();
   } catch (error) {
-    return res.status(401).json({ message: "Invalid or expired token" });
+    return res.status(401).json({
+      message:
+        "Session expired or invalid. Please sign in again with your @thapar.edu account.",
+    });
   }
 }
 

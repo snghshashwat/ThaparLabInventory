@@ -75,8 +75,8 @@ export default function Layout({ children }) {
           </div>
         </header>
 
-        <div className="mx-auto grid w-full max-w-7xl gap-4 px-3 py-4 md:grid-cols-[240px_1fr] md:px-6">
-          <aside className="rounded-2xl border-2 border-red-300 bg-white p-3 shadow-md">
+        <div className="mx-auto grid w-full max-w-7xl gap-4 px-3 py-4 md:grid-cols-[240px_1fr] md:items-start md:px-6">
+          <aside className="self-start rounded-2xl border-2 border-red-300 bg-white p-3 shadow-md">
             <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-red-600">
               Navigation
             </p>

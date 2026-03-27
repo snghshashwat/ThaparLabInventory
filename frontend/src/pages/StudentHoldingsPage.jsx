@@ -31,6 +31,9 @@ export default function StudentHoldingsPage() {
         `/transactions/student/${encodeURIComponent(roll)}/holdings`,
       );
       setResult(data);
+      if (!data.totalItems) {
+        toast.error(data.message || "No holdings right now for this student.");
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch holdings");
     } finally {
@@ -101,8 +104,8 @@ export default function StudentHoldingsPage() {
           </div>
 
           {totalLabs === 0 ? (
-            <p className="text-sm text-zinc-600">
-              No outstanding items for this student.
+            <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-700">
+              No holdings right now for this student.
             </p>
           ) : (
             <div className="space-y-4">
@@ -118,9 +121,10 @@ export default function StudentHoldingsPage() {
                     <table className="min-w-full table-fixed text-left text-sm">
                       <thead className="text-zinc-500">
                         <tr>
-                          <th className="w-[54%] px-2 py-2">Component</th>
-                          <th className="w-[28%] px-2 py-2">ID</th>
-                          <th className="w-[18%] px-2 py-2">Qty Out</th>
+                          <th className="w-[42%] px-2 py-2">Component</th>
+                          <th className="w-[22%] px-2 py-2">ID</th>
+                          <th className="w-[14%] px-2 py-2">Qty Out</th>
+                          <th className="w-[22%] px-2 py-2">Issued On</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -137,6 +141,11 @@ export default function StudentHoldingsPage() {
                             </td>
                             <td className="px-2 py-2 font-semibold text-red-700">
                               {item.qty}
+                            </td>
+                            <td className="px-2 py-2 whitespace-normal break-words">
+                              {item.issuedOn
+                                ? new Date(item.issuedOn).toLocaleString()
+                                : "-"}
                             </td>
                           </tr>
                         ))}

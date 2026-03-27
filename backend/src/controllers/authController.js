@@ -37,7 +37,10 @@ const googleLogin = asyncHandler(async (req, res) => {
   const payload = ticket.getPayload();
 
   if (!payload || !payload.email || !payload.email_verified) {
-    return res.status(401).json({ message: "Google authentication failed" });
+    return res.status(401).json({
+      message:
+        "Google sign-in failed. Please use your @thapar.edu Google account.",
+    });
   }
 
   const email = payload.email.toLowerCase().trim();
@@ -45,7 +48,7 @@ const googleLogin = asyncHandler(async (req, res) => {
   if (!email.endsWith(`@${allowedGoogleDomain}`)) {
     logAction("auth.denied_domain", { email, allowedGoogleDomain });
     return res.status(403).json({
-      message: `Access denied: only @${allowedGoogleDomain} accounts are allowed`,
+      message: `Access denied: this system only allows @${allowedGoogleDomain} accounts.`,
     });
   }
 
@@ -53,9 +56,10 @@ const googleLogin = asyncHandler(async (req, res) => {
 
   if (!role) {
     logAction("auth.denied", { email });
-    return res
-      .status(403)
-      .json({ message: "Access denied: email not allowed" });
+    return res.status(403).json({
+      message:
+        "Access denied: your @thapar.edu account is not whitelisted for this system.",
+    });
   }
 
   const user = {

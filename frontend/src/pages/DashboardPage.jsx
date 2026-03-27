@@ -74,7 +74,7 @@ export default function DashboardPage() {
         <h3 className="text-base font-semibold text-zinc-900">
           Lab Instructor
         </h3>
-        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+        <div className="mt-2 grid gap-2 sm:grid-cols-3">
           <p className="text-sm text-zinc-700">
             Name:{" "}
             <span className="font-semibold text-zinc-900">
@@ -85,6 +85,12 @@ export default function DashboardPage() {
             Contact:{" "}
             <span className="font-semibold text-zinc-900 break-all">
               {instructor?.contact || "Not available"}
+            </span>
+          </p>
+          <p className="text-sm text-zinc-700">
+            Location:{" "}
+            <span className="font-semibold text-zinc-900 break-words">
+              {instructor?.location || "Not available"}
             </span>
           </p>
         </div>
@@ -104,7 +110,7 @@ export default function DashboardPage() {
         />
       </section>
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-4">
+      <section className="rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-sm sm:p-5">
         <h3 className="text-lg font-semibold text-zinc-900">
           Low Stock Alerts
         </h3>
@@ -140,7 +146,7 @@ export default function DashboardPage() {
         )}
       </section>
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-4">
+      <section className="rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-sm sm:p-5">
         <h3 className="text-lg font-semibold text-zinc-900">
           Recent Transactions
         </h3>

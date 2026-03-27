@@ -8,6 +8,7 @@ const {
 const { authenticate } = require("../middleware/auth");
 const { authorizeRoles } = require("../middleware/authorize");
 const { validateRequest } = require("../middleware/validate");
+const { writeLimiter } = require("../middleware/rateLimiters");
 
 const router = express.Router();
 
@@ -31,6 +32,12 @@ router.get(
   getStudentHoldings,
 );
 router.get("/", getTransactions);
-router.post("/", transactionValidation, validateRequest, createTransaction);
+router.post(
+  "/",
+  writeLimiter,
+  transactionValidation,
+  validateRequest,
+  createTransaction,
+);
 
 module.exports = router;

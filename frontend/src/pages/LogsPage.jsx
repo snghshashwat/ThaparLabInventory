@@ -70,44 +70,79 @@ export default function LogsPage() {
         ) : logs.length === 0 ? (
           <p className="text-sm text-zinc-600">No logs found.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full table-fixed text-left text-sm">
-              <thead className="text-zinc-500">
-                <tr>
-                  <th className="w-[14%] px-2 py-2">Roll</th>
-                  <th className="w-[8%] px-2 py-2">Type</th>
-                  <th className="w-[14%] px-2 py-2">Lab</th>
-                  <th className="w-[28%] px-2 py-2">Items</th>
-                  <th className="w-[20%] px-2 py-2">Done By</th>
-                  <th className="w-[16%] px-2 py-2">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {logs.map((log) => (
-                  <tr key={log._id} className="border-t border-zinc-100">
-                    <td className="break-all px-2 py-2 whitespace-normal">
+          <>
+            <div className="space-y-3 sm:hidden">
+              {logs.map((log) => (
+                <article
+                  key={log._id}
+                  className="rounded-xl border border-zinc-200 bg-white p-3 shadow-sm"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-sm font-semibold text-zinc-900 break-all">
                       {log.studentRoll}
-                    </td>
-                    <td className="px-2 py-2 capitalize">{log.type}</td>
-                    <td className="break-words px-2 py-2 whitespace-normal">
-                      {log.lab}
-                    </td>
-                    <td className="break-words px-2 py-2 whitespace-normal">
-                      {log.items
-                        .map((item) => `${item.name} (${item.qty})`)
-                        .join(", ")}
-                    </td>
-                    <td className="break-all px-2 py-2 whitespace-normal">
-                      {log.doneBy}
-                    </td>
-                    <td className="break-words whitespace-normal px-2 py-2">
-                      {new Date(log.timestamp).toLocaleString()}
-                    </td>
+                    </p>
+                    <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold capitalize text-zinc-700">
+                      {log.type}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-xs text-zinc-600 break-words">
+                    Lab:{" "}
+                    <span className="font-medium text-zinc-800">{log.lab}</span>
+                  </p>
+                  <p className="mt-1 text-xs text-zinc-600 break-words">
+                    {log.items
+                      .map((item) => `${item.name} (${item.qty})`)
+                      .join(", ")}
+                  </p>
+                  <p className="mt-2 text-xs text-zinc-500 break-all">
+                    By: {log.doneBy}
+                  </p>
+                  <p className="mt-1 text-xs text-zinc-500 break-words">
+                    {new Date(log.timestamp).toLocaleString()}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <div className="hidden overflow-x-auto sm:block">
+              <table className="min-w-full table-fixed text-left text-sm">
+                <thead className="text-zinc-500">
+                  <tr>
+                    <th className="w-[14%] px-2 py-2">Roll</th>
+                    <th className="w-[8%] px-2 py-2">Type</th>
+                    <th className="w-[14%] px-2 py-2">Lab</th>
+                    <th className="w-[28%] px-2 py-2">Items</th>
+                    <th className="w-[20%] px-2 py-2">Done By</th>
+                    <th className="w-[16%] px-2 py-2">Time</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {logs.map((log) => (
+                    <tr key={log._id} className="border-t border-zinc-100">
+                      <td className="break-all px-2 py-2 whitespace-normal">
+                        {log.studentRoll}
+                      </td>
+                      <td className="px-2 py-2 capitalize">{log.type}</td>
+                      <td className="break-words px-2 py-2 whitespace-normal">
+                        {log.lab}
+                      </td>
+                      <td className="break-words px-2 py-2 whitespace-normal">
+                        {log.items
+                          .map((item) => `${item.name} (${item.qty})`)
+                          .join(", ")}
+                      </td>
+                      <td className="break-all px-2 py-2 whitespace-normal">
+                        {log.doneBy}
+                      </td>
+                      <td className="break-words whitespace-normal px-2 py-2">
+                        {new Date(log.timestamp).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
     </div>

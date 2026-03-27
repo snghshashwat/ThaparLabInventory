@@ -10,6 +10,7 @@ const {
 const { authenticate } = require("../middleware/auth");
 const { authorizeRoles } = require("../middleware/authorize");
 const { validateRequest } = require("../middleware/validate");
+const { writeLimiter } = require("../middleware/rateLimiters");
 
 const router = express.Router();
 
@@ -27,15 +28,23 @@ router.use(authorizeRoles("admin"));
 
 router.get("/warnings", getWarnings);
 router.get("/", getComponents);
-router.post("/", componentValidation, validateRequest, createComponent);
+router.post(
+  "/",
+  writeLimiter,
+  componentValidation,
+  validateRequest,
+  createComponent,
+);
 router.put(
   "/:id",
+  writeLimiter,
   [param("id").isMongoId(), ...componentValidation],
   validateRequest,
   updateComponent,
 );
 router.delete(
   "/:id",
+  writeLimiter,
   [param("id").isMongoId()],
   validateRequest,
   deleteComponent,

@@ -3,11 +3,13 @@ const { body } = require("express-validator");
 const { googleLogin, getMe, logout } = require("../controllers/authController");
 const { authenticate } = require("../middleware/auth");
 const { validateRequest } = require("../middleware/validate");
+const { authLimiter } = require("../middleware/rateLimiters");
 
 const router = express.Router();
 
 router.post(
   "/google",
+  authLimiter,
   [
     body("credential")
       .isString()
@@ -19,7 +21,7 @@ router.post(
   googleLogin,
 );
 
-router.get("/me", authenticate, getMe);
-router.post("/logout", authenticate, logout);
+router.get("/me", authLimiter, authenticate, getMe);
+router.post("/logout", authLimiter, authenticate, logout);
 
 module.exports = router;

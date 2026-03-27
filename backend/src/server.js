@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 
 const connectDB = require("./config/db");
+const validateEnv = require("./config/validateEnv");
 const authRoutes = require("./routes/authRoutes");
 const componentRoutes = require("./routes/componentRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
@@ -17,12 +18,16 @@ const { errorHandler, notFound } = require("./middleware/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+validateEnv();
+
 const frontendOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
 app.set("trust proxy", 1);
+app.disable("x-powered-by");
 
 app.use(
   helmet({
@@ -52,6 +57,8 @@ app.use(
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204,
   }),
 );
 

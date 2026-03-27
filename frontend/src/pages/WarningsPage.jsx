@@ -83,48 +83,94 @@ export default function WarningsPage() {
             No components are below threshold right now.
           </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full table-fixed text-left text-sm">
-              <thead className="text-zinc-500">
-                <tr>
-                  <th className="w-[20%] px-2 py-2">Component</th>
-                  <th className="w-[16%] px-2 py-2">Model ID</th>
-                  <th className="w-[14%] px-2 py-2">Lab</th>
-                  <th className="w-[12%] px-2 py-2">Current Qty</th>
-                  <th className="w-[12%] px-2 py-2">Total Qty</th>
-                  <th className="w-[10%] px-2 py-2">Threshold</th>
-                  <th className="w-[16%] px-2 py-2">Below Since</th>
-                </tr>
-              </thead>
-              <tbody>
-                {warnings.map((item) => (
-                  <tr key={item._id} className="border-t border-zinc-100">
-                    <td className="break-words px-2 py-2 whitespace-normal">
-                      {item.name}
-                    </td>
-                    <td className="break-all px-2 py-2 whitespace-normal">
-                      {item.componentId}
-                    </td>
-                    <td className="break-words px-2 py-2 whitespace-normal">
+          <>
+            <div className="space-y-3 sm:hidden">
+              {warnings.map((item) => (
+                <article
+                  key={item._id}
+                  className="rounded-xl border border-zinc-200 bg-white p-3 shadow-sm"
+                >
+                  <p className="text-sm font-semibold text-zinc-900 break-words">
+                    {item.name}
+                  </p>
+                  <p className="mt-1 text-xs text-zinc-500 break-all">
+                    ID: {item.componentId}
+                  </p>
+                  <p className="mt-1 text-xs text-zinc-600 break-words">
+                    Lab:{" "}
+                    <span className="font-medium text-zinc-800">
                       {item.lab}
-                    </td>
-                    <td className="px-2 py-2 font-semibold text-red-700">
-                      {item.available}
-                    </td>
-                    <td className="px-2 py-2">
-                      {item.totalStock ?? item.available}
-                    </td>
-                    <td className="px-2 py-2">{item.threshold}</td>
-                    <td className="px-2 py-2">
-                      {item.belowThresholdSince
-                        ? new Date(item.belowThresholdSince).toLocaleString()
-                        : "-"}
-                    </td>
+                    </span>
+                  </p>
+                  <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+                    <p className="rounded-lg bg-red-50 px-2 py-1 text-red-700">
+                      Current:{" "}
+                      <span className="font-semibold">{item.available}</span>
+                    </p>
+                    <p className="rounded-lg bg-zinc-100 px-2 py-1 text-zinc-700">
+                      Total:{" "}
+                      <span className="font-semibold">
+                        {item.totalStock ?? item.available}
+                      </span>
+                    </p>
+                    <p className="rounded-lg bg-amber-50 px-2 py-1 text-amber-700">
+                      Threshold:{" "}
+                      <span className="font-semibold">{item.threshold}</span>
+                    </p>
+                  </div>
+                  <p className="mt-2 text-xs text-zinc-500 break-words">
+                    Below since:{" "}
+                    {item.belowThresholdSince
+                      ? new Date(item.belowThresholdSince).toLocaleString()
+                      : "-"}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <div className="hidden overflow-x-auto sm:block">
+              <table className="min-w-full table-fixed text-left text-sm">
+                <thead className="text-zinc-500">
+                  <tr>
+                    <th className="w-[20%] px-2 py-2">Component</th>
+                    <th className="w-[16%] px-2 py-2">Model ID</th>
+                    <th className="w-[14%] px-2 py-2">Lab</th>
+                    <th className="w-[12%] px-2 py-2">Current Qty</th>
+                    <th className="w-[12%] px-2 py-2">Total Qty</th>
+                    <th className="w-[10%] px-2 py-2">Threshold</th>
+                    <th className="w-[16%] px-2 py-2">Below Since</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {warnings.map((item) => (
+                    <tr key={item._id} className="border-t border-zinc-100">
+                      <td className="break-words px-2 py-2 whitespace-normal">
+                        {item.name}
+                      </td>
+                      <td className="break-all px-2 py-2 whitespace-normal">
+                        {item.componentId}
+                      </td>
+                      <td className="break-words px-2 py-2 whitespace-normal">
+                        {item.lab}
+                      </td>
+                      <td className="px-2 py-2 font-semibold text-red-700">
+                        {item.available}
+                      </td>
+                      <td className="px-2 py-2">
+                        {item.totalStock ?? item.available}
+                      </td>
+                      <td className="px-2 py-2">{item.threshold}</td>
+                      <td className="px-2 py-2">
+                        {item.belowThresholdSince
+                          ? new Date(item.belowThresholdSince).toLocaleString()
+                          : "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
     </div>

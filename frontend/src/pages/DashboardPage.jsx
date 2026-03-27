@@ -119,32 +119,62 @@ export default function DashboardPage() {
             No low stock items in this lab.
           </p>
         ) : (
-          <div className="mt-3 overflow-x-auto">
-            <table className="min-w-full table-fixed text-left text-sm">
-              <thead className="text-zinc-500">
-                <tr>
-                  <th className="w-[44%] px-2 py-2">Component</th>
-                  <th className="w-[28%] px-2 py-2">ID</th>
-                  <th className="w-[14%] px-2 py-2">Available</th>
-                  <th className="w-[14%] px-2 py-2">Threshold</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dashboard.lowStock.map((item) => (
-                  <tr key={item._id} className="border-t border-zinc-100">
-                    <td className="break-words whitespace-normal px-2 py-2 font-medium text-zinc-800">
-                      {item.name}
-                    </td>
-                    <td className="break-all whitespace-normal px-2 py-2">
-                      {item.componentId}
-                    </td>
-                    <td className="px-2 py-2 text-red-700">{item.available}</td>
-                    <td className="px-2 py-2">{item.threshold}</td>
+          <>
+            <div className="mt-3 space-y-3 sm:hidden">
+              {dashboard.lowStock.map((item) => (
+                <article
+                  key={item._id}
+                  className="rounded-xl border border-zinc-200 bg-white p-3 shadow-sm"
+                >
+                  <p className="text-sm font-semibold text-zinc-900 break-words">
+                    {item.name}
+                  </p>
+                  <p className="mt-1 text-xs text-zinc-500 break-all">
+                    ID: {item.componentId}
+                  </p>
+                  <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                    <p className="rounded-lg bg-red-50 px-2 py-1 text-red-700">
+                      Available:{" "}
+                      <span className="font-semibold">{item.available}</span>
+                    </p>
+                    <p className="rounded-lg bg-zinc-100 px-2 py-1 text-zinc-700">
+                      Threshold:{" "}
+                      <span className="font-semibold">{item.threshold}</span>
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="mt-3 hidden overflow-x-auto sm:block">
+              <table className="min-w-full table-fixed text-left text-sm">
+                <thead className="text-zinc-500">
+                  <tr>
+                    <th className="w-[44%] px-2 py-2">Component</th>
+                    <th className="w-[28%] px-2 py-2">ID</th>
+                    <th className="w-[14%] px-2 py-2">Available</th>
+                    <th className="w-[14%] px-2 py-2">Threshold</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {dashboard.lowStock.map((item) => (
+                    <tr key={item._id} className="border-t border-zinc-100">
+                      <td className="break-words whitespace-normal px-2 py-2 font-medium text-zinc-800">
+                        {item.name}
+                      </td>
+                      <td className="break-all whitespace-normal px-2 py-2">
+                        {item.componentId}
+                      </td>
+                      <td className="px-2 py-2 text-red-700">
+                        {item.available}
+                      </td>
+                      <td className="px-2 py-2">{item.threshold}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
 
@@ -152,7 +182,40 @@ export default function DashboardPage() {
         <h3 className="text-lg font-semibold text-zinc-900">
           Recent Transactions
         </h3>
-        <div className="mt-3 overflow-x-auto">
+        <div className="mt-3 space-y-3 sm:hidden">
+          {dashboard.recentTransactions.length === 0 ? (
+            <p className="text-sm text-zinc-600">No recent transactions.</p>
+          ) : (
+            dashboard.recentTransactions.map((txn) => (
+              <article
+                key={txn._id}
+                className="rounded-xl border border-zinc-200 bg-white p-3 shadow-sm"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-sm font-semibold text-zinc-900 break-all">
+                    {txn.studentRoll}
+                  </p>
+                  <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold capitalize text-zinc-700">
+                    {txn.type}
+                  </span>
+                </div>
+                <p className="mt-2 text-xs text-zinc-600 break-words">
+                  {txn.items
+                    .map((item) => `${item.name} (${item.qty})`)
+                    .join(", ")}
+                </p>
+                <p className="mt-2 text-xs text-zinc-500 break-all">
+                  By: {txn.doneBy}
+                </p>
+                <p className="mt-1 text-xs text-zinc-500 break-words">
+                  {new Date(txn.timestamp).toLocaleString()}
+                </p>
+              </article>
+            ))
+          )}
+        </div>
+
+        <div className="mt-3 hidden overflow-x-auto sm:block">
           <table className="min-w-full table-fixed text-left text-sm">
             <thead className="text-zinc-500">
               <tr>

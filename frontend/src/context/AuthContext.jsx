@@ -32,9 +32,18 @@ export function AuthProvider({ children }) {
   }, [loadCurrentUser]);
 
   const loginWithGoogleCredential = useCallback(async (credential) => {
-    const { data } = await api.post("/auth/google", { credential });
-    setUser(data.user);
-    return data.user;
+    await api.post("/auth/google", { credential });
+
+    try {
+      const { data } = await api.get("/auth/me");
+      setUser(data.user);
+      return data.user;
+    } catch {
+      setUser(null);
+      throw new Error(
+        "Login session could not be established. Open the app using the same host for frontend and backend.",
+      );
+    }
   }, []);
 
   const logout = useCallback(async () => {

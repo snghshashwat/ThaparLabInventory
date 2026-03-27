@@ -29,6 +29,10 @@ function sanitizeInput(req, res, next) {
     sanitizeMongoKeys(req.params);
   }
 
+  if (req.query) {
+    sanitizeMongoKeys(req.query);
+  }
+
   next();
 }
 

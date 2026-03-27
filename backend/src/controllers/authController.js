@@ -16,13 +16,18 @@ function cookieOptions() {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? "none" : "lax",
+    path: "/",
     maxAge: 8 * 60 * 60 * 1000,
   };
 }
 
 function createToken(payload) {
   return jwt.sign(payload, process.env.JWT_SECRET, {
+    algorithm: "HS256",
     expiresIn: "8h",
+    issuer: "thapar-lab-inventory",
+    audience: "thapar-lab-frontend",
+    subject: payload.email,
   });
 }
 

@@ -139,10 +139,12 @@ export default function TransactionsPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-zinc-900">Take / Return</h2>
+    <div className="space-y-5">
+      <h2 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
+        Take / Return
+      </h2>
 
-      <div className="grid gap-3 rounded-xl border border-zinc-200 bg-white p-4 md:grid-cols-2">
+      <div className="grid gap-3 rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-sm sm:p-5 md:grid-cols-2">
         <div>
           <label className="mb-1 block text-sm font-medium text-zinc-700">
             Lab
@@ -188,7 +190,7 @@ export default function TransactionsPage() {
             <button
               type="button"
               onClick={() => setScannerOpen((open) => !open)}
-              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 sm:w-auto"
+              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 sm:w-auto sm:min-w-[132px]"
             >
               {scannerOpen ? "Close Scanner" : "Scan ID Card"}
             </button>
@@ -205,7 +207,7 @@ export default function TransactionsPage() {
         </div>
       </div>
 
-      <div className="grid gap-3 rounded-xl border border-zinc-200 bg-white p-4 sm:grid-cols-[1fr_120px_auto]">
+      <div className="grid gap-3 rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-sm sm:grid-cols-[1fr_120px_auto] sm:p-5">
         <div>
           <label className="mb-1 block text-sm font-medium text-zinc-700">
             Component
@@ -248,19 +250,19 @@ export default function TransactionsPage() {
         </div>
       </div>
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-4">
+      <section className="rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-sm sm:p-5">
         <h3 className="text-lg font-semibold text-zinc-900">Cart</h3>
         {cart.length === 0 ? (
           <p className="mt-2 text-sm text-zinc-600">No items added yet.</p>
         ) : (
           <div className="mt-3 overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
+            <table className="min-w-full table-fixed text-left text-sm">
               <thead className="text-zinc-500">
                 <tr>
-                  <th className="px-2 py-2">Component</th>
-                  <th className="px-2 py-2">ID</th>
-                  <th className="px-2 py-2">Qty</th>
-                  <th className="px-2 py-2">Action</th>
+                  <th className="w-[46%] px-2 py-2">Component</th>
+                  <th className="w-[28%] px-2 py-2">ID</th>
+                  <th className="w-[12%] px-2 py-2">Qty</th>
+                  <th className="w-[14%] px-2 py-2">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -269,8 +271,12 @@ export default function TransactionsPage() {
                     key={item.componentId}
                     className="border-t border-zinc-100"
                   >
-                    <td className="px-2 py-2">{item.name}</td>
-                    <td className="px-2 py-2">{item.componentId}</td>
+                    <td className="break-words px-2 py-2 whitespace-normal">
+                      {item.name}
+                    </td>
+                    <td className="break-all px-2 py-2 whitespace-normal">
+                      {item.componentId}
+                    </td>
                     <td className="px-2 py-2">{item.qty}</td>
                     <td className="px-2 py-2">
                       <button

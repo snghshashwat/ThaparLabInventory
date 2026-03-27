@@ -39,10 +39,12 @@ export default function StudentHoldingsPage() {
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-zinc-900">Student Holdings</h2>
+    <div className="space-y-5">
+      <h2 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
+        Student Holdings
+      </h2>
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-4">
+      <section className="rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-sm sm:p-5">
         <label className="mb-1 block text-sm font-medium text-zinc-700">
           Roll Number
         </label>
@@ -56,7 +58,7 @@ export default function StudentHoldingsPage() {
           <button
             type="button"
             onClick={() => setScannerOpen((open) => !open)}
-            className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700"
+            className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 sm:min-w-[132px]"
           >
             {scannerOpen ? "Close Scanner" : "Scan ID Card"}
           </button>
@@ -82,7 +84,7 @@ export default function StudentHoldingsPage() {
       </section>
 
       {result ? (
-        <section className="rounded-xl border border-zinc-200 bg-white p-4">
+        <section className="rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-sm sm:p-5">
           <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-zinc-600">
               Roll:{" "}
@@ -107,18 +109,18 @@ export default function StudentHoldingsPage() {
               {result.labs.map((labSummary) => (
                 <div
                   key={labSummary.lab}
-                  className="rounded-lg border border-zinc-200 p-3"
+                  className="rounded-xl border border-zinc-200 p-3"
                 >
                   <h3 className="mb-2 text-base font-semibold text-zinc-900">
                     {labSummary.lab}
                   </h3>
                   <div className="overflow-x-auto">
-                    <table className="min-w-full text-left text-sm">
+                    <table className="min-w-full table-fixed text-left text-sm">
                       <thead className="text-zinc-500">
                         <tr>
-                          <th className="px-2 py-2">Component</th>
-                          <th className="px-2 py-2">ID</th>
-                          <th className="px-2 py-2">Qty Out</th>
+                          <th className="w-[54%] px-2 py-2">Component</th>
+                          <th className="w-[28%] px-2 py-2">ID</th>
+                          <th className="w-[18%] px-2 py-2">Qty Out</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -127,8 +129,12 @@ export default function StudentHoldingsPage() {
                             key={`${labSummary.lab}-${item.componentId}`}
                             className="border-t border-zinc-100"
                           >
-                            <td className="px-2 py-2">{item.name}</td>
-                            <td className="px-2 py-2">{item.componentId}</td>
+                            <td className="break-words px-2 py-2 whitespace-normal">
+                              {item.name}
+                            </td>
+                            <td className="break-all px-2 py-2 whitespace-normal">
+                              {item.componentId}
+                            </td>
                             <td className="px-2 py-2 font-semibold text-red-700">
                               {item.qty}
                             </td>

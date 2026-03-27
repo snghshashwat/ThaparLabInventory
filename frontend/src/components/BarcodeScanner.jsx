@@ -107,8 +107,8 @@ export default function BarcodeScanner({
   }, [onDetected, preferredFacing, selectedDeviceId]);
 
   const wrapperClass = inline
-    ? "w-full rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"
-    : "w-full max-w-lg rounded-2xl bg-white p-4 shadow-xl";
+    ? "w-full rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-sm"
+    : "w-full max-w-lg rounded-2xl bg-white/95 p-4 shadow-xl";
 
   const containerClass = inline
     ? "w-full"
@@ -152,7 +152,7 @@ export default function BarcodeScanner({
             >
               {videoDevices.map((device, index) => (
                 <option key={device.deviceId} value={device.deviceId}>
-                  {device.label || `Camera ${index + 1}`}
+                  {(device.label || `Camera ${index + 1}`).slice(0, 50)}
                 </option>
               ))}
             </select>

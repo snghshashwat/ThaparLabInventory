@@ -1,0 +1,29 @@
+const express = require("express");
+const { body } = require("express-validator");
+const {
+  createTransaction,
+  getTransactions,
+} = require("../controllers/transactionController");
+const { authenticate } = require("../middleware/auth");
+const { authorizeRoles } = require("../middleware/authorize");
+const { validateRequest } = require("../middleware/validate");
+
+const router = express.Router();
+
+const transactionValidation = [
+  body("studentRoll").isString().trim().isLength({ min: 2, max: 60 }),
+  body("type").isIn(["take", "return"]),
+  body("lab").isString().trim().isLength({ min: 2, max: 80 }),
+  body("items").isArray({ min: 1 }),
+  body("items.*.componentId").isString().trim().isLength({ min: 2, max: 60 }),
+  body("items.*.name").isString().trim().isLength({ min: 1, max: 120 }),
+  body("items.*.qty").isInt({ min: 1 }),
+];
+
+router.use(authenticate);
+router.use(authorizeRoles("admin"));
+
+router.get("/", getTransactions);
+router.post("/", transactionValidation, validateRequest, createTransaction);
+
+module.exports = router;

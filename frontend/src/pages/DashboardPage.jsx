@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import api from "../lib/api";
 import StatCard from "../components/StatCard";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { LAB_OPTIONS } from "../config/constants";
+import { LAB_INSTRUCTORS, LAB_OPTIONS } from "../config/constants";
 
 export default function DashboardPage() {
   const [lab, setLab] = useState(LAB_OPTIONS[0]);
@@ -51,9 +51,10 @@ export default function DashboardPage() {
     (sum, item) => sum + item.available,
     0,
   );
+  const instructor = LAB_INSTRUCTORS[lab];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <h2 className="text-2xl font-bold text-zinc-900">Dashboard</h2>
         <select
@@ -68,6 +69,26 @@ export default function DashboardPage() {
           ))}
         </select>
       </div>
+
+      <section className="rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-sm sm:p-5">
+        <h3 className="text-base font-semibold text-zinc-900">
+          Lab Instructor
+        </h3>
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+          <p className="text-sm text-zinc-700">
+            Name:{" "}
+            <span className="font-semibold text-zinc-900">
+              {instructor?.name || "Not assigned"}
+            </span>
+          </p>
+          <p className="text-sm text-zinc-700">
+            Contact:{" "}
+            <span className="font-semibold text-zinc-900 break-all">
+              {instructor?.contact || "Not available"}
+            </span>
+          </p>
+        </div>
+      </section>
 
       <section className="grid gap-3 md:grid-cols-3">
         <StatCard label="Components" value={dashboard.inventory.length} />
